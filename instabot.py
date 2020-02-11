@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
+from random import uniform
 
 
 class InstaBot:
@@ -32,22 +33,22 @@ class InstaBot:
 
         for i in range(1, 3):  # scrolls down twice
             bot.execute_script('window.scrollTo(0,document.body.scrollHeight)')
-            time.sleep(2)
+            time.sleep(uniform(2.5, 3.5))
             posts = bot.find_elements_by_class_name('v1Nh3')
-            links = [elem.find_element_by_css_selector(
-                'a').get_attribute('href') for elem in posts]
+            links = [elem.find_element_by_css_selector('a').get_attribute('href') for elem in posts]
+            # we get links in the format of instagram.com/p/id
 
             for link in links:  
                 count += 1
-                if count < 45:  # number of top posts to leave a like on
+                if count < 35:  # number of top posts to leave a like on
                     bot.get(link)
                     try:
                         div = bot.find_elements_by_class_name('dCJp8')
-                        lov = [el.find_element_by_class_name('glyphsSpriteHeart__outline__24__grey_9').click() for el in div]
-                        print('liked photo')
-                        time.sleep(5)
+                        like = [el.find_element_by_class_name('glyphsSpriteHeart__outline__24__grey_9').click() for el in div]
+                        print(f'liked photo {link}')
+                        time.sleep(uniform(5, 7))
                     except Exception as ex:
-                        time.sleep(10)
+                        time.sleep(7)
                 else:  # after 45 times the bot exits
                     bot.close()
 
